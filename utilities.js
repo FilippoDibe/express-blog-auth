@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 
-let posts = require("./DB/db.json");
+const posts = require("./DB/db.json");
 
 const generateSlug = (title, existingSlugs) => {
     let slug = title.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, '');
@@ -15,14 +15,21 @@ const generateSlug = (title, existingSlugs) => {
 
 const updatePosts = (newPosts) => {
     const filePath = path.join(__dirname, './DB/db.json');
-    const fileContent = ` ${JSON.stringify(newPosts, null, 2)}`;
+    const fileContent = JSON.stringify(newPosts, null, 2);
     fs.writeFileSync(filePath, fileContent);
     posts = newPosts;
+};
+
+const usersFilePath = path.join(__dirname, './DB/users.json');
+
+const readUsersFromFile = () => {
+    const data = fs.readFileSync(usersFilePath, 'utf8');
+    return JSON.parse(data);
 };
 
 module.exports = {
     generateSlug,
     updatePosts,
-    posts
+    posts,
+    readUsersFromFile
 };
-
